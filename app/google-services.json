@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "990691078117",
+    "firebase_url": "https://filmes-975df.firebaseio.com",
+    "project_id": "filmes-975df",
+    "storage_bucket": "filmes-975df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990691078117:android:7ff0537e21ecd612",
+        "android_client_info": {
+          "package_name": "br.edu.uni7.filmes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "990691078117-j1p3o53blt7rcadf6u6mmp0unttoqef3.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "990691078117-j1p3o53blt7rcadf6u6mmp0unttoqef3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6ZCfzBPCE4qzaKgBJ4scSv24WlreJrYM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
