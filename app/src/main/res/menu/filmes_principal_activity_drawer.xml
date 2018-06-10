@@ -5,14 +5,14 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_lista_filmes"
-            android:title="Lista de filmes"/>
+            android:id="@+id/nav_lista_filmes_populares"
+            android:title="@string/menu_filmes_populares"/>
         <item
-            android:id="@+id/nav_filmes_favoritos"
-            android:title="Filmes favoritos"/>
+            android:id="@+id/nav_lista_filmes_favoritos"
+            android:title="@string/menu_filmes_favoritos"/>
         <item
             android:id="@+id/nav_sair"
-            android:title="Sair"/>
+            android:title="@string/menu_sair"/>
     </group>
 
 </menu>
