@@ -56,7 +56,6 @@
             </android.support.design.widget.TextInputLayout>
             <Button
                 android:id="@+id/bt_login"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -67,9 +66,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="5dp"
-                android:text="Não possui conta? Cadastre-se!"
+                android:text="OU"
                 android:textAlignment="center"
                 android:textAllCaps="false"/>
+            <Button
+                android:id="@+id/bt_cadastro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/cadastrar_se"
+                android:textStyle="bold"/>
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

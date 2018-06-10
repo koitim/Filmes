@@ -17,4 +17,5 @@
     <string name="menu_sair">Sair</string>
     <string name="remover_favorito">Remover favorito</string>
     <string name="adicionar_favorito">Adicionar favorito</string>
+    <string name="cadastrar_se">Cadastrar-se</string>
 </resources>

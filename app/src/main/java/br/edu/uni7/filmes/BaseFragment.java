@@ -3,9 +3,11 @@ package br.edu.uni7.filmes;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ProgressBar;
 
 public abstract class BaseFragment extends Fragment {
@@ -52,6 +54,13 @@ public abstract class BaseFragment extends Fragment {
 
   public View getView() {
     return mView;
+  }
+
+  public void hideKeyboard(View view) {
+    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+    if (imm != null) {
+      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
   }
 }
 

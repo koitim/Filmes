@@ -31,14 +31,14 @@ public class Filme implements Parcelable {
 
   public Filme() {
     favorito = false;
-
   }
 
   protected Filme(Parcel in) {
-    id      = in.readInt();
-    titulo  = in.readString();
-    sinopse = in.readString();
-    imagem  = in.readString();
+    id       = in.readInt();
+    titulo   = in.readString();
+    sinopse  = in.readString();
+    imagem   = in.readString();
+    favorito = in.readByte() != 0;
   }
 
   public static final Creator<Filme> CREATOR = new Creator<Filme>() {
@@ -109,6 +109,7 @@ public class Filme implements Parcelable {
     dest.writeString(titulo);
     dest.writeString(sinopse);
     dest.writeString(imagem);
+    dest.writeByte((byte)(favorito ? 1 : 0));
   }
 
   @Override

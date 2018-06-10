@@ -1,6 +1,7 @@
 package br.edu.uni7.filmes.filmes.view;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 
 import br.edu.uni7.filmes.BaseFragment;
 import br.edu.uni7.filmes.R;
-import br.edu.uni7.filmes.filmes.util.SpacesItemDecoration;
 
 public class ListarFilmes extends BaseFragment {
 
@@ -72,5 +72,23 @@ public class ListarFilmes extends BaseFragment {
   }
 
 
+  private class SpacesItemDecoration extends RecyclerView.ItemDecoration {
+    private int space;
+
+    SpacesItemDecoration(int space) {
+      this.space = space;
+    }
+
+    @Override
+    public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+      outRect.left = space;
+      outRect.right = space;
+      outRect.bottom = space;
+
+      if(parent.getChildAdapterPosition(view) == 0)
+        outRect.top = space;
+
+    }
+  }
 
 }

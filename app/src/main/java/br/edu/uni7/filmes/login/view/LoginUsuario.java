@@ -37,7 +37,7 @@ public class LoginUsuario extends BaseFragment implements TextView.OnEditorActio
         .findViewById(R.id.bt_login)
         .setOnClickListener(this);
     view
-        .findViewById(R.id.tv_cadastro)
+        .findViewById(R.id.bt_cadastro)
         .setOnClickListener(this);
 
     mEmail       = view.findViewById(R.id.login_email);
@@ -46,7 +46,7 @@ public class LoginUsuario extends BaseFragment implements TextView.OnEditorActio
     mProgressBar = view.findViewById(R.id.pb_login);
 
     mSenha.setOnEditorActionListener(this);
-
+    hideKeyboard(view);
     return view;
   }
 
@@ -79,7 +79,7 @@ public class LoginUsuario extends BaseFragment implements TextView.OnEditorActio
   @Override
   public void onClick(View v) {
     switch (v.getId()) {
-      case R.id.tv_cadastro:
+      case R.id.bt_cadastro:
         listener.exibirCadastro();
         break;
       case R.id.bt_login:

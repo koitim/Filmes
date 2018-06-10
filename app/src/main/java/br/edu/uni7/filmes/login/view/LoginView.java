@@ -120,14 +120,6 @@ public class LoginView extends BaseActivity implements OnLoginInteractionListene
   }
 
 
-  // Métodos privados
-  private void hideKeyboard(View view) {
-    final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    if (imm != null) {
-      imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-  }
-
   private void exibirLogin() {
     presenter.setOperacaoAtual(ILoginMVP.ILoginPresenter.LOGIN);
     exibeTela(R.id.activity_login, ILoginMVP.ILoginPresenter.LOGIN);

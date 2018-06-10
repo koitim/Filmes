@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -27,13 +28,19 @@ import br.edu.uni7.filmes.login.view.LoginView;
 public class FilmesView extends BaseActivity
     implements OnFilmesInteractionListener, NavigationView.OnNavigationItemSelectedListener, IFilmesMVP.IFilmesView {
 
+  private static final int LISTA_FILMES_POPULARES = 1;
+  private static final int LISTA_FILMES_FAVORITOS = 2;
+  private static final int EXIBE_FILME = 3;
+
   private IFilmesMVP.IFilmesPresenter presenter;
-
-  private NavigationView navigationView;
-
   private Filme mFilmeExibido;
-  private int operacaoAnterior;
+  private int telaAtual;
+  private int telaAnterior;
   private FilmesAdapter adapter;
+
+  private NavigationView mNavigationView;
+
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +69,10 @@ public class FilmesView extends BaseActivity
     drawer.addDrawerListener(toggle);
     toggle.syncState();
 
-    navigationView = findViewById(R.id.nav_view);
-    navigationView.setNavigationItemSelectedListener(this);
-    habilitaMenuFavoritos();
+    mNavigationView = findViewById(R.id.nav_view);
+    mNavigationView.setNavigationItemSelectedListener(this);
 
-    TextView tvEmail = navigationView.getHeaderView(0).findViewById(R.id.tv_email);
+    TextView tvEmail = mNavigationView.getHeaderView(0).findViewById(R.id.tv_email);
     tvEmail.setText(presenter.getEmailUsuario());
 
     listarFilmesPopulares();
@@ -78,19 +84,19 @@ public class FilmesView extends BaseActivity
     if (drawer.isDrawerOpen(GravityCompat.START)) {
       drawer.closeDrawer(GravityCompat.START);
     } else {
-      switch (presenter.getOperacaoAtual()) {
-        case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES:
+      switch (telaAtual) {
+        case LISTA_FILMES_POPULARES:
           logout();
           break;
-        case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS:
+        case LISTA_FILMES_FAVORITOS:
           listarFilmesPopulares();
           break;
-        case IFilmesMVP.IFilmesPresenter.EXIBE_FILME:
-          switch (operacaoAnterior) {
-            case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES:
+        case EXIBE_FILME:
+          switch (telaAnterior) {
+            case LISTA_FILMES_POPULARES:
               listarFilmesPopulares();
               break;
-            case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS:
+            case LISTA_FILMES_FAVORITOS:
               listarFilmesFavoritos();
               break;
           }
@@ -99,30 +105,17 @@ public class FilmesView extends BaseActivity
     }
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.filmes_principal_menu, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    int id = item.getItemId();
-    return id == R.id.action_settings || super.onOptionsItemSelected(item);
-  }
-
-
 
   @Override
   public boolean onNavigationItemSelected(@NonNull MenuItem item) {
     int id = item.getItemId();
     switch (id) {
       case R.id.nav_lista_filmes_favoritos:
-        if (presenter.getOperacaoAtual() != IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS)
+        if (telaAtual != LISTA_FILMES_FAVORITOS)
           listarFilmesFavoritos();
         break;
       case R.id.nav_lista_filmes_populares:
-        if (presenter.getOperacaoAtual() != IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES)
+        if (telaAtual != LISTA_FILMES_POPULARES)
           listarFilmesPopulares();
         break;
       case R.id.nav_sair:
@@ -140,13 +133,13 @@ public class FilmesView extends BaseActivity
   @Override
   protected void carregaFragmento(int tela) {
     switch (tela) {
-      case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES:
+      case LISTA_FILMES_POPULARES:
         fragmento = ListarFilmes.newInstance();
         break;
-      case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS:
+      case LISTA_FILMES_FAVORITOS:
         fragmento = ListarFilmes.newInstance();
         break;
-      case IFilmesMVP.IFilmesPresenter.EXIBE_FILME:
+      case EXIBE_FILME:
         fragmento = ExibirFilme.newInstance(mFilmeExibido);
         break;
     }
@@ -156,29 +149,26 @@ public class FilmesView extends BaseActivity
 
   @Override
   public void listarFilmesPopulares() {
-    int operacaoAtual = presenter.getOperacaoAtual();
-    if (operacaoAtual == IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS ||
-        (operacaoAtual == IFilmesMVP.IFilmesPresenter.EXIBE_FILME &&
-            operacaoAnterior == IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS)) {
+    if (telaAtual == LISTA_FILMES_FAVORITOS ||
+        (telaAtual == EXIBE_FILME &&
+            telaAnterior == LISTA_FILMES_FAVORITOS)) {
       adapter.replaceFilmes(presenter.getFilmesPopulares());
     }
-    marcarMenu(IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES);
-    operacaoAnterior = operacaoAtual;
-    presenter.setOperacaoAtual(IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES);
-    exibeTela(R.id.activity_filmes, IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES);
+    marcarMenu(LISTA_FILMES_POPULARES);
+    telaAnterior = telaAtual;
+    telaAtual = LISTA_FILMES_POPULARES;
+    exibeTela(R.id.activity_filmes, LISTA_FILMES_POPULARES);
   }
 
   @Override
   public void listarFilmesFavoritos() {
-    int operacaoAtual = presenter.getOperacaoAtual();
-    if (operacaoAtual == IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES ||
-        (operacaoAtual == IFilmesMVP.IFilmesPresenter.EXIBE_FILME &&
-            operacaoAnterior == IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES)) {
+    if (telaAtual == LISTA_FILMES_POPULARES ||
+        telaAtual == EXIBE_FILME) {
       adapter.replaceFilmes(presenter.getFilmesFavoritos());
     }
-    operacaoAnterior = operacaoAtual;
-    presenter.setOperacaoAtual(IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS);
-    exibeTela(R.id.activity_filmes, IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS);
+    telaAnterior = telaAtual;
+    telaAtual = LISTA_FILMES_FAVORITOS;
+    exibeTela(R.id.activity_filmes, LISTA_FILMES_FAVORITOS);
   }
 
   @Override
@@ -194,12 +184,43 @@ public class FilmesView extends BaseActivity
   @Override
   public void exibirFilme(Filme filme) {
     mFilmeExibido = filme;
-    operacaoAnterior = presenter.getOperacaoAtual();
-    presenter.setOperacaoAtual(IFilmesMVP.IFilmesPresenter.EXIBE_FILME);
-    exibeTela(R.id.activity_filmes, IFilmesMVP.IFilmesPresenter.EXIBE_FILME);
+    telaAnterior = telaAtual;
+    telaAtual = EXIBE_FILME;
+    exibeTela(R.id.activity_filmes, EXIBE_FILME);
   }
 
 
+
+  @Override
+  public void habilitaMenuFavoritos(boolean habilita) {
+    mNavigationView
+        .getMenu()
+        .findItem(R.id.nav_lista_filmes_favoritos)
+        .setEnabled(habilita);
+  }
+
+  @Override
+  public void bloqueiaFilmesPopulares(String mensagem) {
+    mNavigationView
+        .getMenu()
+        .findItem(R.id.nav_lista_filmes_populares)
+        .setEnabled(false);
+    Snackbar
+        .make(fragmento.getView(), mensagem, Snackbar.LENGTH_SHORT)
+        .show();
+  }
+
+  @Override
+  public void addFilmes(List<Filme> filmes) {
+    if (telaAtual == LISTA_FILMES_POPULARES) {
+      adapter.addFilmes(filmes);
+    }
+  }
+
+  @Override
+  public Context getContexto() {
+    return getApplicationContext();
+  }
 
 
 
@@ -224,7 +245,7 @@ public class FilmesView extends BaseActivity
         .setNegativeButton("Não", new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
-            marcarMenu(presenter.getOperacaoAtual());
+            marcarMenu(telaAtual);
             dialogInterface.dismiss();
           }
         });
@@ -234,44 +255,14 @@ public class FilmesView extends BaseActivity
 
   private void marcarMenu(int tela) {
     switch (tela) {
-      case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_POPULARES:
-        navigationView.setCheckedItem(R.id.nav_lista_filmes_populares);
+      case LISTA_FILMES_POPULARES:
+        mNavigationView.setCheckedItem(R.id.nav_lista_filmes_populares);
         break;
-      case IFilmesMVP.IFilmesPresenter.LISTA_FILMES_FAVORITOS:
-        navigationView.setCheckedItem(R.id.nav_lista_filmes_favoritos);
+      case LISTA_FILMES_FAVORITOS:
+        mNavigationView.setCheckedItem(R.id.nav_lista_filmes_favoritos);
         break;
       default:
         break;
     }
-  }
-
-  @Override
-  public void habilitaMenuFavoritos() {
-    navigationView
-        .getMenu()
-        .findItem(R.id.nav_lista_filmes_favoritos)
-        .setEnabled(presenter.temFilmeFavorito());
-  }
-
-
-
-  @Override
-  public void exibirProgresso() {
-    fragmento.showProgress(true);
-  }
-
-  @Override
-  public void esconderProgresso() {
-    fragmento.showProgress(false);
-  }
-
-  @Override
-  public void addFilmes(List<Filme> filmes) {
-    adapter.addFilmes(filmes);
-  }
-
-  @Override
-  public Context getContexto() {
-    return getApplicationContext();
   }
 }

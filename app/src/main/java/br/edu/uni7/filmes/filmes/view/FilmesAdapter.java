@@ -39,11 +39,6 @@ class FilmesAdapter
     notifyDataSetChanged();
   }
 
-  void addFilme(Filme filme) {
-    filmes.add(filme);
-    notifyDataSetChanged();
-  }
-
   @NonNull
   @Override
   public FilmesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
